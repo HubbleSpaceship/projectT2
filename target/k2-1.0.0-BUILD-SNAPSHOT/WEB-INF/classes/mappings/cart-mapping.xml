@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CART">
+	  
+ <insert id="INSERT" parameterType="cart"  >
+	   insert into CartTBL (cartId, custNo, productId, amount )
+	   values (seq_cartTBL.NEXTVAL ,#{custNo}, #{productId}, #{amount})
+ </insert>
+ 
+  <insert id="OrderDoc" parameterType="OrderDoc"  >
+	   insert into OrderDoc (idx, custNo, cartId, productId, productName ,amount, orderG)
+	   values (seq_cartTBL.NEXTVAL ,#{custNo}, #{cartId}, #{productId}, #{productName}, #{amount}, #{orderG})
+ </insert>
+ 
+  <insert id="OrderMoney" parameterType="OrderMoney"  >
+	   insert into OrderMoney (idx, custNo, shipping, totalMoney )
+	   values (seq_cartTBL.NEXTVAL ,#{OcustNo}, #{shipping}, #{totalMoney})
+ </insert>
+ 
+ 
+
+  <delete id="DELETE" parameterType="cart"  >
+  	 delete from CartTBL where cartId = #{cartId} 
+ </delete>
+ 
+  <delete id="DELETEALL" parameterType="cart"  >
+  		 delete from CartTBL  
+ </delete>
+ 
+  <update id="CARTUPDATE" parameterType="cart"  >
+   		update CartTBL set  amount = #{amount} where cartId = #{cartId}
+ </update>
+ 
+ <select id="SELECT"  parameterType="cart" resultType="cart" >
+	   select  cartId, c.productId, productName, productPrice, amount, productImg as productImgStr 
+	   from CartTBL c join productTBL p
+	   on c.productId = p.productId
+   
+ </select>
+ 
+  <select id="orderG"  resultType="int" parameterType="OrderMoney" >
+
+   	select max(idx) idx from orderMoney where custNo = #{OcustNo}
+   	
+ </select>
+ 
+ 
+  <select id="SELECTJOIN"  parameterType="cart" resultType="cart" >
+	   select m.idx, custno, shipping, totalmoney, getdate  
+	   from orderMoney M join orderDoc D
+		on m.idx = d.orderG 
+		order by m.idx desc;
+   
+ </select>
+ 
+   <select id="orderList"  parameterType="OrderMoney" resultType="OrderMoney" >
+	   select idx, custNo as OcustNo, shipping, totalMoney, getDate
+	   from orderMoney  order by idx desc
+   
+ </select>
+ 
+ <select id="SELECTJOIN"  parameterType="cart" resultType="cart" >
+	   select m.idx, custno, shipping, totalmoney, getdate  
+	   from orderMoney M join orderDoc D
+		on m.idx = d.orderG 
+		order by m.idx desc;
+   
+ </select>
+ 
+  <select id="orderOne"  parameterType="OrderOne" resultType="OrderOne" >
+	    select   m.shipping, M.TOTALMONEY, M.GETDATE, d.IDX, m2.CUSTNAME, phone,
+    	m2.ADDRESS, D.ORDERG ,d.idx , d.productname , D.PRODUCTID, d.amount 
+		from orderMoney M join  orderDoc D
+		on m.idx = d.orderG 
+		join member_tbl_02 m2
+		on m.CUSTNO = m2.CUSTNO
+		where m.idx = #{idx}
+		order by m.idx desc;
+   
+ </select>
+ 
+ 
+
+ 
+ 
+
+</mapper>

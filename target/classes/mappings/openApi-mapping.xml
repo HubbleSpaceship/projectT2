@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OPENAPI">
+	  
+ <insert id="INSERT" parameterType="api"  >
+   insert into company2 (idx, entrprsNm, rprsntvNm, rdnmadr , logitude, latitude, mainGoods)
+   values (company_idx.NEXTVAL ,#{entrprsNm}, #{rprsntvNm}, #{rdnmadr}, #{logitude}, #{latitude},#{mainGoods})
+    
+ </insert>
+ 
+  <select id="SELECTONE"  parameterType="api"
+                                     resultType="api" >
+   select  *  from company2 where IDX = #{idx}
+   
+ </select>
+ 
+ <select id="EvSELECTONE"  parameterType="ev"
+                                     resultType="ev" >
+   select  *  from EvSearch where idx = #{idx}
+   
+ </select>
+ 
+  <insert id="EvINSERT" parameterType="ev"  >
+   insert into EvSearch (IDX,csNm, addr, cpNm , cpStat)
+   values (company_idx.NEXTVAL ,#{csNm}, #{addr}, #{cpNm}, #{cpStat})
+    
+ </insert>
+ 
+  <select id="SELECT"  parameterType="api"
+                                     resultType="api" >
+   select  *  from company2 
+   
+ 
+ </select>
+ 
+  <select id="EvSELECT"  parameterType="ev"
+                                     resultType="ev" >
+   select  *  from EvSearch where addr like '%서울%' order by addr
+   
+ 
+ </select>
+ 
+
+ 
+ 
+</mapper>
